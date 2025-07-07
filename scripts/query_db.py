@@ -4,6 +4,7 @@ import pandas as pd
 from pathlib import Path
 from ret_utils.io_helper import load_cell_list, generate_where_clause
 
+
 # Load environment from the repository root
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
@@ -18,6 +19,7 @@ OUTPUT_BASE_DIR = "D:/D&T Project/CR Preparing/"
 
 sql_lte = f"lte_{week_name}"
 sql_nr = f"nr_{week_name}"
+
 
 df_cell = load_cell_list(INPUT_FILE_PATH)
 site_ids = df_cell['site_name_1'].unique()
@@ -158,7 +160,9 @@ SELECT
 FROM hwret_data a
 LEFT JOIN
     retdevicedata_1 c ON concat(a.NAME, a.Device_Name, a.Device_No, a.subunit_no) = concat(c.NAME, c.Device_Name, c.Device_No, c.subunit_no)
+
 WHERE a.date BETWEEN '{start_date}' AND '{end_date}'
+
   AND {where_clause_2}
 GROUP BY 
      
@@ -187,7 +191,9 @@ SELECT
 FROM 
     eric_air_data a
 
+
 WHERE a.date BETWEEN '{start_date}' AND '{end_date}' AND {where_clause_1}
+
 GROUP BY 
      
     antenna_type, 
@@ -223,9 +229,11 @@ SELECT
     minTilt,
     date,
     electricalAntennaTilt
+
 FROM
     eric_non_air_data a
 WHERE a.date BETWEEN '{start_date}' AND '{end_date}' AND {where_clause_1}
+
 GROUP BY 
      
     antenna_type, 
@@ -269,7 +277,9 @@ LEFT JOIN cellphytopo c
     ON CONCAT(a.enodeb_name, a.local_cell_id) = CONCAT(c.name, c.local_cell_id)
 LEFT JOIN bfant b 
     ON CONCAT(b.name, b.connect_rru_subrack_no) = CONCAT(c.name, split_part(c.rf_module_information, '-', 2))
+
 WHERE b.date BETWEEN '{start_date}' AND '{end_date}' AND {where_clause}
+
 GROUP BY a.cell_name,a.system, a.local_cell_id, b.name,b.device_no, b.connect_rru_subrack_no, c.local_cell_id,b.date, b.tilt
 """
 
@@ -284,7 +294,9 @@ SELECT
 FROM {sql_nr} a 
 JOIN NRDUCELLTRPBEAM b
     ON CONCAT(a.gnodeb_name, a.nr_du_cell_id) = CONCAT(b.name, b.nr_du_cell_trp_id)
+
 WHERE b.date BETWEEN '{start_date}' AND '{end_date}' AND {where_clause}
+
 GROUP BY a.nr_cell_name,a.system, a.nr_du_cell_id, b.name,b.nr_du_cell_trp_id,b.date, b.tilt
 """
 
@@ -299,6 +311,8 @@ SELECT
 FROM {sql_lte} a 
 JOIN SECTORSPLITCELL b
     ON CONCAT(a.enodeb_name, a.local_cell_id) = CONCAT(b.name, b.local_cell_id)
+
 WHERE b.date BETWEEN '{start_date}' AND '{end_date}' AND {where_clause}
 GROUP BY a.cell_name,a.system, a.local_cell_id, b.name,b.local_cell_id,b.date, cell_beam_tilt
 """
+
