@@ -1,0 +1,19 @@
+# Python cache files
+__pycache__/
+*.pyc
+
+# Environment files
+*.env
+
+# IDE/editor configs
+.vscode/
+
+# Logs
+*.log
+
+# Output artifacts
+/output/
+
+
+# Ignore all log files
+log/*.log
