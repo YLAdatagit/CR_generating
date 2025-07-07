@@ -26,6 +26,8 @@ def run_pipeline(cfg):
     # ensure query templates pick up runtime values
     os.environ["CLUSTER_NAME"] = cfg["CLUSTER_NAME"]
     os.environ["WEEK_NUM"] = cfg["WEEK_NUM"]
+    os.environ["START_DATE"] = cfg["START_DATE"]
+    os.environ["END_DATE"] = cfg["END_DATE"]
 
     qdb = importlib.import_module("scripts.query_db")
 
