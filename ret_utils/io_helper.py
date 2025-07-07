@@ -51,3 +51,4 @@ def tuning_band_logic(system: str) -> str:
     if system == "L2300":
         return "L2300"
     return "Unknown"
+
