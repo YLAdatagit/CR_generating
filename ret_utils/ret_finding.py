@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+from pathlib import Path
 
 def lte_cell_normalized(df):
     """
@@ -171,7 +172,6 @@ def get_site_name(cell_name):
 
 def load_cell_list(csv_path: str) -> pd.DataFrame:
     """Read a tuning‑list CSV, normalise headers, strip cell names, add `site_name_1`."""
-    from pathlib import Path
     if not Path(csv_path).exists():
         raise FileNotFoundError(f"Tuning list not found: {csv_path}")
 
@@ -277,11 +277,7 @@ def hwret(df_hw):
 
 
 def eric_non_air(df):
-    """
-    Enhanced version of eric_non_air function with support for multiple tuning bands in userlabel
-    """
-    import re
-    import pandas as pd
+    """Enhanced version supporting multiple tuning bands in userlabel."""
 
     # Early exit for empty DataFrame
     if df.empty:

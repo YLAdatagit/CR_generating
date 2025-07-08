@@ -1,5 +1,4 @@
-"""PostgreSQL helpers (single responsibility: connect, generic query, list tables)."""
-from pathlib import Path
+"""PostgreSQL helpers for connection and simple queries."""
 from sqlalchemy import create_engine
 import pandas as pd
 import os

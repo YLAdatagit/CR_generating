@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+from pathlib import Path
 
 def get_site_name(cell_name):
     match_device = re.search(r'[A-Z]{3,4}\d{3,4}', cell_name)
@@ -11,7 +12,6 @@ def get_site_name(cell_name):
 
 def load_cell_list(csv_path: str) -> pd.DataFrame:
     """Read a tuning‑list CSV, normalise headers, strip cell names, add `site_name_1`."""
-    from pathlib import Path
     if not Path(csv_path).exists():
         raise FileNotFoundError(f"Tuning list not found: {csv_path}")
 
@@ -37,7 +37,6 @@ def generate_where_clause(site_ids):
 
 def fetch_data(sql: str, conn):
     """Run a raw SQL query via an open psycopg2/SQLAlchemy connection."""
-    import pandas as pd
     return pd.read_sql_query(sql, conn)
 
 
