@@ -22,10 +22,20 @@ load_dotenv(Path(__file__).resolve().parent / ".env")
 # ---------- Helpers ---------- #
 
 def latest_week_from_db():
-    """Query the DB for the newest WEEK_NUM in lte_wk table."""
+    """Return the newest week based on the latest `lte_<WEEK>` table name."""
     import db_utils
-    sql = "SELECT DISTINCT week FROM lte_wk ORDER BY week DESC LIMIT 1"
-    return db_utils.run_query(sql).iloc[0, 0]
+    sql = """
+        SELECT table_name
+        FROM information_schema.tables
+        WHERE table_schema = 'public' AND table_name LIKE 'lte_%'
+        ORDER BY table_name DESC
+        LIMIT 1
+    """
+    df = db_utils.run_query(sql)
+    if df.empty:
+        raise RuntimeError("No LTE week tables found")
+    table = df.iloc[0, 0]
+    return table.split('_', 1)[1]  # extracts week (e.g., 'WK2525')
 
 
 def build_cfg(args) -> dict:

@@ -20,6 +20,9 @@ The pipeline extracts LTE and NR information from PostgreSQL tables and produces
    ```
    Optional defaults for `CLUSTER_NAME` and `WEEK_NUM` may also be placed here.
 
+3. Ensure LTE weekly tables follow the pattern `lte_<WEEK_NUM>` (e.g., `lte_WK2525`).
+   Auto mode detects the latest week by looking for the alphabetically last such table.
+
 Input tuning lists are expected at:
 `D:/D&T Project/CR Preparing/<cluster_prefix>/Tuning_cell_list_<cluster>.csv`
 
@@ -29,6 +32,8 @@ Run in *auto* mode to fetch the latest week and last two weeks of data:
 ```bash
 python -m scripts.main --auto --cluster BMA00001_R1
 ```
+Auto mode derives the week by selecting the alphabetically last table matching
+`lte_<WEEK_NUM>`.
 
 The resulting CSV files are stored under `D:/D&T Project/CR Preparing/<cluster_prefix>` and zipped into `<cluster>_files.zip`.
 
