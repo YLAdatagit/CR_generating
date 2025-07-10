@@ -32,6 +32,7 @@ def list_tables(schema: str = "public") -> pd.DataFrame:
 def run_query(sql: str, **params) -> pd.DataFrame:
     """Run parameterised SQL and return a DataFrame.
 
+
     ``pandas.read_sql`` passes an ``immutabledict`` instance when no parameters
     are supplied, which some DB drivers treat as an invalid sequence.  To avoid
     the resulting ``TypeError`` we open a raw DBAPI connection and pass ``None``
@@ -44,3 +45,5 @@ def run_query(sql: str, **params) -> pd.DataFrame:
         return pd.read_sql(sql, conn)
     finally:
         conn.close()
+
+    
