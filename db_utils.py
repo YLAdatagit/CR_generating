@@ -30,5 +30,17 @@ def list_tables(schema: str = "public") -> pd.DataFrame:
 
 
 def run_query(sql: str, **params) -> pd.DataFrame:
-    """Helper to run parameterised SQL and return DataFrame."""
-    return pd.read_sql(sql, get_engine(), params=params)
+    """Run parameterised SQL and return a DataFrame.
+
+    ``pandas.read_sql`` passes an ``immutabledict`` instance when no parameters
+    are supplied, which some DB drivers treat as an invalid sequence.  To avoid
+    the resulting ``TypeError`` we open a raw DBAPI connection and pass ``None``
+    instead of an empty mapping when no parameters are provided.
+    """
+    conn = get_engine().raw_connection()
+    try:
+        if params:
+            return pd.read_sql(sql, conn, params=params)
+        return pd.read_sql(sql, conn)
+    finally:
+        conn.close()
