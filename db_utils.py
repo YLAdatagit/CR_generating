@@ -30,5 +30,12 @@ def list_tables(schema: str = "public") -> pd.DataFrame:
 
 
 def run_query(sql: str, **params) -> pd.DataFrame:
-    """Helper to run parameterised SQL and return DataFrame."""
-    return pd.read_sql(sql, get_engine(), params=params)
+    """Run parameterised SQL and return a DataFrame.
+
+    Pandas/SQLAlchemy will raise a ``TypeError`` when an empty dictionary is
+    passed as ``params`` even for queries that do not use parameters.  To avoid
+    this, ``params`` is only supplied when it contains values.
+    """
+    if params:
+        return pd.read_sql(sql, get_engine(), params=params)
+    return pd.read_sql(sql, get_engine())
