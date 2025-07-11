@@ -1,6 +1,5 @@
 import pandas as pd
 import re
-from pathlib import Path
 
 def lte_cell_normalized(df):
     """
@@ -162,27 +161,6 @@ def eric_air(df, sectorcarrierid_col, nodeid_col):
     result_df = pd.concat([df, processed_df], axis=1)
     return result_df
 
-def get_site_name(cell_name):
-    match_device = re.search(r'[A-Z]{3,4}\d{3,4}', cell_name)
-    if match_device:
-        return match_device.group(0)
-    else:
-        return "No Site Name"
-
-
-def load_cell_list(csv_path: str) -> pd.DataFrame:
-    """Read a tuning‑list CSV, normalise headers, strip cell names, add `site_name_1`."""
-    if not Path(csv_path).exists():
-        raise FileNotFoundError(f"Tuning list not found: {csv_path}")
-
-    df = pd.read_csv(csv_path)
-    df.columns = [c.lower() for c in df.columns]
-    if "cell name" not in df.columns:
-        raise ValueError("Expected column 'cell name' in tuning list")
-
-    df["cell name"] = df["cell name"].str.strip()
-    df["site_name_1"] = df["cell name"].apply(get_site_name)  # get_site_name already exists
-    return df
 
 
 
@@ -277,7 +255,11 @@ def hwret(df_hw):
 
 
 def eric_non_air(df):
-    """Enhanced version supporting multiple tuning bands in userlabel."""
+    """
+    Enhanced version of eric_non_air function with support for multiple tuning bands in userlabel
+    """
+    import re
+    import pandas as pd
 
     # Early exit for empty DataFrame
     if df.empty:

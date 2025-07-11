@@ -25,6 +25,8 @@ def load_cell_list(csv_path: str) -> pd.DataFrame:
     return df
 
 
+
+
 #  Query-helper & mapping utilities (NEW):
 # -------------------------------------------------------------------
 def generate_where_clause(site_ids):
@@ -50,4 +52,28 @@ def tuning_band_logic(system: str) -> str:
     if system == "L2300":
         return "L2300"
     return "Unknown"
+
+def suggestion(xtxr,vendor, antenna_type, is_lte=True):
+    bfant = ['AAU5639', 'AAU5614', 'AAU5636']
+    sectorsplitcell = ['AAU5711a', 'AAU5726']
+    if vendor == 'Huawei':
+        if is_lte: 
+            if any(item in antenna_type for item in bfant):
+                return 'BFANT'
+            elif any(item in antenna_type for item in sectorsplitcell):
+                return 'SECTORSPLITCELL'
+            else:
+                return 'RETSUBUNIT'
+        else:
+            if xtxr.upper() != '64T64R':
+                return 'RETSUBUNIT'
+            else:
+                return 'NRDUCELLTRPBEAM'
+    elif vendor == 'Ericsson':
+        if 'AIR' in antenna_type:
+            return 'AIR (SectorCarrier)'
+        else:
+            return 'NON_AIR (ElectricalTilt)'
+    else:
+        return 'TBD'
 
